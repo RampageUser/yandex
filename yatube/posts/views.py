@@ -1,10 +1,16 @@
 from django.shortcuts import render
 
 
-def get_main_page(request):
+def index(request):
     template = 'index.html'
-    return render(request, template)
+    context = {
+        'text': 'Это главная страница проекта Yatube'
+    }
+    return render(request, template, context)
     
-def get_group(request):
+def group_posts(request):
     template = 'group_list.html'
-    return render(request, template)
+    context = {
+        'text': 'Здесь будет информация о группах проекта Yatube'
+    }
+    return render(request, template, context)
