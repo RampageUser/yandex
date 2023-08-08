@@ -1,0 +1,16 @@
+{% extends 'includes/base.html' %}
+{% block title %}Записи сообщества {{group.title}} | Yatube{% endblock %}
+{% block content %}
+{% for post in posts %}
+<h1>{% ifchanged  %}
+    {{group.title}}
+    <br>
+    <p>{{group.description}}</p>
+    {% endifchanged %}</h1>
+<h3>
+    Автор: {{post.author.get_full_name}}, дата публикации: {{post.pub_date}}
+</h3>
+<p>{{post.text}}</p>
+{% if not forloop.last %}<hr>{%endif%}
+{% endfor %}
+{% endblock %}
