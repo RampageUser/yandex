@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% block title %}Записи сообщества {{group.title}} | Yatube{% endblock %}
+{% block content %}
+{% for post in page_obj %}
+  {% ifchanged  %}
+    <h1>{{group.title}}</h1>
+    <p>{{group.description}}</p>
+  {% endifchanged %}
+  <ul>
+    <li>Автор: {{post.author.get_full_name}}</li>
+    <li>дата публикации: {{post.pub_date}}</li>
+  </ul>
+  <p>{{post.text}}</p>
+  {% if user == post.author or user.is_superuser or user.is_staff %}
+    <br>
+    <a class="btn btn-danger" href="{% url "posts:delete" post.pk %}">
+      {% if user == post.author %}
+        Удалить{% else %}Удалить пост {{ post.author }}
+      {% endif %}
+    </a>
+{% endif %}
+  {% if not forloop.last %}<hr>{%endif%}
+  {% empty %}
+  <h1>Нет постов в группе: {{ group.title|lower }}</h1>
+{% endfor %}
+{% include 'includes/paginator.html' %}
+{% endblock %}

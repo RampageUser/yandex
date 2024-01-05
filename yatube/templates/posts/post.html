@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% load user_filters %}
+{% block title %}Создание поста{% endblock title %}
+{% block content %}
+<form action="{% url "posts:post" %}" method="post">
+	{% csrf_token %}
+  {% for field in form %}
+		<div class="form-group row my-3 p-3">
+			<label for="{{ field.id_for_label }}">
+				{{ field.label }}
+				{% if field.field.required %}
+				<span class="required text-danger">*</span>
+				{% endif %}
+			</label>
+			{{ field|addclass:'form-control' }}
+		</div>
+  {% endfor %}
+	<button type="submit" class="btn btn-primary">Опубликовать</button>
+</form>
+{% endblock content %}
