@@ -1,12 +1,11 @@
-from typing import Any
-from django.contrib.auth.views import LoginView, LogoutView
+from django.contrib.auth.views import LoginView, LogoutView, PasswordChangeView, PasswordChangeDoneView
 from django.contrib.auth import login
 from django.db.models.query import QuerySet
 from django.http import Http404
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.views.generic import UpdateView
-from .forms import RegistrationForm, ProfilForm
+from .forms import RegistrationForm, ProfileForm
 from .models import CustomUser
 
 
@@ -34,13 +33,22 @@ class CustomLogoutView(LogoutView):
     template_name = 'users/logged_out.html'
 
 
-class ProfilView(UpdateView):
-    template_name = 'users/profil.html'
-    form_class = ProfilForm
+class CustomPasswordChangeView(PasswordChangeView):
+    template_name = 'users/password_change_form.html'
+    success_url = reverse_lazy('users:password_change_done')
+
+
+class CustomPasswordChangeDoneView(PasswordChangeDoneView):
+    template_name = 'users/password_change_done.html'
+
+
+class ProfileView(UpdateView):
+    template_name = 'users/profile.html'
+    form_class = ProfileForm
     success_url = reverse_lazy('posts:index' )
     pk_url_kwarg = 'id'
 
-    def get_queryset(self) -> QuerySet[Any]:
+    def get_queryset(self):
         user_id = self.kwargs.get('id')
         queriset = CustomUser.objects.filter(pk=user_id)
         if not queriset.exists():

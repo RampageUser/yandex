@@ -15,7 +15,7 @@ class RegistrationForm(UserCreationForm):
         fields = ('email', 'username', 'password1', 'password2')
 
 
-class ProfilForm(UserChangeForm):
+class ProfileForm(UserChangeForm):
     password = None
 
     class Meta:

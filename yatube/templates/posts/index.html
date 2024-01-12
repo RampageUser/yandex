@@ -5,11 +5,11 @@
   	{% for post in page_obj %}
 		<ul>
 			<li>
-				Автор: {% if post.author.get_full_name %}{{ post.author.get_full_name }}{% else %}{{ post.author.get_username }}{% endif %}
+				Автор: <a href="{% url "posts:profile" post.author.get_username %}">{% if post.author.get_full_name %}{{ post.author.get_full_name }}{% else %}{{ post.author.get_username }}{% endif %}</a>
 			</li>
 			<li>Дата публикации: {{ post.pub_date|date:"d E Y" }}</li>
 		</ul>
-		<p>{{ post.text }}</p>
+		<p><a href="{% url "posts:post_detail" post.pk %}" class="link-secondary">{{ post.text|truncatechars:35 }}</a></p>
 		{% if post.group.slug %}
 			<a href="{% url "posts:group_list" post.group.slug %}">Все записи группы: {{ post.group }}</a>
 		{% endif %}
