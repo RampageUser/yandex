@@ -1,6 +1,14 @@
-from django.contrib.auth.views import LoginView, LogoutView, PasswordChangeView, PasswordChangeDoneView
+from django.contrib.auth.views import (
+    LoginView,
+    LogoutView,
+    PasswordChangeView,
+    PasswordChangeDoneView,
+    PasswordResetView,
+    PasswordResetDoneView,
+    PasswordResetConfirmView,
+    PasswordResetCompleteView
+)
 from django.contrib.auth import login
-from django.db.models.query import QuerySet
 from django.http import Http404
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
@@ -18,11 +26,8 @@ def sign_up(request):
             return redirect('posts:index')
     else:
         form = RegistrationForm()
-    context = {
-        'form': form
-    }
+    context = {'form': form}
     return render(request, 'users/signup.html', context)
-
 
 
 class CustomLoginView(LoginView):
@@ -42,10 +47,29 @@ class CustomPasswordChangeDoneView(PasswordChangeDoneView):
     template_name = 'users/password_change_done.html'
 
 
+class CustomPasswordResetView(PasswordResetView):
+    template_name = 'users/password_reset_form.html'
+    email_template_name = 'users/password_reset_email.html'
+    success_url = reverse_lazy('users:password_reset_done')
+
+
+class CustomPasswordResetDoneView(PasswordResetDoneView):
+    template_name = 'users/password_reset_done.html'
+
+
+class CustomPasswordResetConfirmView(PasswordResetConfirmView):
+    template_name = 'users/password_reset_confirm.html'
+    success_url = reverse_lazy('users:password_reset_complete')
+
+
+class CustomPasswordResetCompleteView(PasswordResetCompleteView):
+    template_name = 'users/password_reset_complete.html'
+
+
 class ProfileView(UpdateView):
     template_name = 'users/profile.html'
     form_class = ProfileForm
-    success_url = reverse_lazy('posts:index' )
+    success_url = reverse_lazy('posts:index')
     pk_url_kwarg = 'id'
 
     def get_queryset(self):
@@ -54,4 +78,3 @@ class ProfileView(UpdateView):
         if not queriset.exists():
             raise Http404('User does not exist')
         return queriset
-        
